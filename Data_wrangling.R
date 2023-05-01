@@ -6,6 +6,10 @@ library(sf)
 library(readr)
 library(lubridate)
 library(httr)
+library(reshape2)
+
+
+# TODO: ADD ELECTRICITY - GAS as predictor (or sth like this)
 
 # postcodes data 
 # The file is to big to be uploaded to Github :(
@@ -173,11 +177,28 @@ mean_mileage <- cbind(y2020 = mileage_2020[,2], y2021 = mileage_2021[,2])
 rownames(mean_mileage) <- rownames(mileage_2020)
 
 
-
-
 full_data <- cbind(postal_code = Chargers_month_final[,2], CP = Chargers_month_final[,c(7:42)], EV = EV_month[,-1])
 
 
+data_wide <- 
+x <- reshape2::melt(EV_month)
+
 write.csv(full_data, 'datasets/Full_data.csv')
+
+
+
+population <- read.csv('datasets/population.csv', sep = ';')
+
+
+EV_month_long <- gather(EV_month, key = "month_year", value = "value", -1)
+CP_month_long <- gather(Chargers_month_final[,c(2,7:42)], key = "month_year", value = "value", -1)
+colnames(CP_month_long) <- c("postal_code", "month_year",  "value")
+merged_df <- merge(EV_month_long, CP_month_long, by = c("postal_code", "month_year"),
+                   all.x = TRUE,suffixes = c("_EV", "_CP"))
+
+Fuel_prices$month_year <- paste0('y',Fuel_prices$`year(Perioden)`,'.m',Fuel_prices$`month(Perioden)`)
+full_data_wide <- merge(merged_df, Fuel_prices[,c(3,4)], by = c('month_year'))
+
+
 
 
