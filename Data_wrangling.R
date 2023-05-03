@@ -6,9 +6,15 @@ library(sf)
 library(readr)
 library(lubridate)
 library(httr)
+
 library(reshape2)
 
+<<<<<<< HEAD
 #comment from radu 
+=======
+
+
+>>>>>>> 063006d2e1dfdbacb3cddefbfa6801bcfbc6ac89
 # TODO: ADD ELECTRICITY - GAS as predictor (or sth like this)
 
 # postcodes data 
@@ -48,7 +54,7 @@ data_chargers$Postal.Code <- readr::parse_number(data_chargers$Postal.Code)
 chargers_postal <- data_chargers %>% count(Postal.Code)
 
 
-chargers_postal <- merge(chargers_postal, geojson[,c(2,7)], by.x ='Postal.Code', by.y =  'pc4_code')
+chargers_postal <- merge(chargers_postal, geojson[,c(2,5)], by.x ='Postal.Code', by.y =  'pc4_code')
 
 colnames(chargers_postal) <- c('Postal.Code', 'n', 'City')
 # chargers_postal <- merge(chargers_postal, data_chargers[,c(2,3)], by = 'Postal.Code')
@@ -137,7 +143,7 @@ postal_codes <- read.csv("datasets/postal_codes.csv", sep = ';')
 
 
 
-chargers_postal <- chargers_postal %>% left_join(geojson[,c(2,7)], by =join_by(Postal.Code == pc4_code))
+chargers_postal <- chargers_postal %>% left_join(geojson[,c(2,5)], by =join_by(Postal.Code == pc4_code))
 
 chargers_month[30,1] <- 'Bergen (L)'
 
@@ -180,14 +186,11 @@ rownames(mean_mileage) <- rownames(mileage_2020)
 full_data <- cbind(postal_code = Chargers_month_final[,2], CP = Chargers_month_final[,c(7:42)], EV = EV_month[,-1])
 
 
-data_wide <- 
-x <- reshape2::melt(EV_month)
-
+cars_data <- read.csv('datasets/cars_limburg.csv')
+colnames(cars_data) <- c('postal_code', 'year', 'value_cars')
 write.csv(full_data, 'datasets/Full_data.csv')
 
 
-
-population <- read.csv('datasets/population.csv', sep = ';')
 
 
 EV_month_long <- gather(EV_month, key = "month_year", value = "value", -1)
@@ -198,7 +201,56 @@ merged_df <- merge(EV_month_long, CP_month_long, by = c("postal_code", "month_ye
 
 Fuel_prices$month_year <- paste0('y',Fuel_prices$`year(Perioden)`,'.m',Fuel_prices$`month(Perioden)`)
 full_data_wide <- merge(merged_df, Fuel_prices[,c(3,4)], by = c('month_year'))
+# changing y2020.m1 to y2020.m01
+full_data_wide$month_year <- str_replace(full_data_wide$month_year, "(?<=\\.m)\\d(?=$)", sprintf("%02d", as.integer(str_extract(full_data_wide$month_year, "(?<=\\.m)\\d(?=$)"))))
+
+full_data_wide <- full_data_wide %>% arrange(postal_code, month_year)
+
+full_data_wide$year  <- substr(full_data_wide$month_year, 2, 5)
+full_data_wide <- merge(full_data_wide, cars_data, by = c('year', 'postal_code'))
+
+full_data_wide <- full_data_wide[,-1]
 
 
+
+
+
+
+library(forecast)
+library(xts)
+
+
+
+
+# Replace 'y' with ''
+full_data_wide$month_year <- gsub("y", "", full_data_wide$month_year)
+full_data_wide$month_year <- gsub(".m", "-", full_data_wide$month_year)
+# Add '-01' to the end of each date to create a full date format (YYYY-MM-DD)
+full_data_wide$month_year <- paste(full_data_wide$month_year, "-01", sep="")
+
+# Convert the column to Date format
+full_data_wide$month_year <- as.Date(full_data_wide$month_year, format = "%Y-%m-%d")
+
+df <- full_data_wide
+# Order the data by month_year
+df <- df[order(df$month_year),]
+
+# Split the dataset into training and testing sets
+train_df <- df[df$month_year < as.Date("2022-06-01"),]
+test_df <- df[df$month_year >= as.Date("2022-06-02"),]
+
+# Convert the training set's value_CP column to a time series object with frequency 12
+train_ts <- ts(train_df$value_CP, frequency = 12)
+
+# Fit the ARIMA model
+arima_model <- auto.arima(train_ts)
+
+
+future_months <- length(test_df$month_year)
+predictions <- forecast(arima_model, h = future_months)
+
+
+comparison <- data.frame(actual = test_df$value_CP, predicted = predictions$mean)
+print(comparison)
 
 
