@@ -48,7 +48,7 @@ data_chargers$Postal.Code <- readr::parse_number(data_chargers$Postal.Code)
 chargers_postal <- data_chargers %>% count(Postal.Code)
 
 
-chargers_postal <- merge(chargers_postal, geojson[,c(2,7)], by.x ='Postal.Code', by.y =  'pc4_code')
+chargers_postal <- merge(chargers_postal, geojson[,c(2,5)], by.x ='Postal.Code', by.y =  'pc4_code')
 
 colnames(chargers_postal) <- c('Postal.Code', 'n', 'City')
 # chargers_postal <- merge(chargers_postal, data_chargers[,c(2,3)], by = 'Postal.Code')
@@ -137,7 +137,7 @@ postal_codes <- read.csv("datasets/postal_codes.csv", sep = ';')
 
 
 
-chargers_postal <- chargers_postal %>% left_join(geojson[,c(2,7)], by =join_by(Postal.Code == pc4_code))
+chargers_postal <- chargers_postal %>% left_join(geojson[,c(2,5)], by =join_by(Postal.Code == pc4_code))
 
 chargers_month[30,1] <- 'Bergen (L)'
 
