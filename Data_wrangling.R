@@ -9,8 +9,12 @@ library(httr)
 
 library(reshape2)
 
+<<<<<<< HEAD
+#comment from radu 
+=======
 
 
+>>>>>>> 063006d2e1dfdbacb3cddefbfa6801bcfbc6ac89
 # TODO: ADD ELECTRICITY - GAS as predictor (or sth like this)
 
 # postcodes data 
