@@ -227,6 +227,8 @@ full_data_wide$month_year <- paste(full_data_wide$month_year, "-01", sep="")
 # Convert the column to Date format
 full_data_wide$month_year <- as.Date(full_data_wide$month_year, format = "%Y-%m-%d")
 
+write_csv(full_data_wide, 'datasets/wide_data_modelling.csv')
+
 df <- full_data_wide
 # Order the data by month_year
 df <- df[order(df$month_year),]
