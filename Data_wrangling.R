@@ -8,7 +8,7 @@ library(lubridate)
 library(httr)
 library(reshape2)
 
-
+#comment from radu 
 # TODO: ADD ELECTRICITY - GAS as predictor (or sth like this)
 
 # postcodes data 
