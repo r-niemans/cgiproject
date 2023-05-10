@@ -8,7 +8,7 @@ library(lubridate)
 library(httr)
 library(credentials)
 library(reshape2)
-
+library(tidyr)
 
 
 
@@ -213,12 +213,6 @@ full_data_wide <- full_data_wide[,-1]
 
 
 
-library(forecast)
-library(xts)
-
-
-
-
 # Replace 'y' with ''
 full_data_wide$month_year <- gsub("y", "", full_data_wide$month_year)
 full_data_wide$month_year <- gsub(".m", "-", full_data_wide$month_year)
@@ -229,5 +223,26 @@ full_data_wide$month_year <- paste(full_data_wide$month_year, "-01", sep="")
 full_data_wide$month_year <- as.Date(full_data_wide$month_year, format = "%Y-%m-%d")
 
 write_csv(full_data_wide, 'datasets/wide_data_modelling.csv')
+
+# TODO: Create mock data for monthly observations that will continue the trend
+
+# We use interpolation to simulate monthly data where we have only yearly
+
+
+# First we need to delete all the value in between the Januaries
+df <- full_data_wide
+df<- df %>% mutate(value_cars = ifelse(row_number() %% 12 == 1, value_cars, NA))
+
+# Then we interpolate the values in between
+
+df <- df %>%
+  group_by(postal_code) %>%
+  mutate(value_cars = approx(x = month_year, y = value_cars, xout = month_year, method = "linear", rule = 2)$y) %>%
+  ungroup()
+df$value_cars <- round(df$value_cars)
+
+full_data_wide <- df
+write_csv(full_data_wide, 'datasets/wide_data_modelling.csv')
+
 
 
