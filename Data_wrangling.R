@@ -230,26 +230,4 @@ full_data_wide$month_year <- as.Date(full_data_wide$month_year, format = "%Y-%m-
 
 write_csv(full_data_wide, 'datasets/wide_data_modelling.csv')
 
-df <- full_data_wide
-# Order the data by month_year
-df <- df[order(df$month_year),]
-
-# Split the dataset into training and testing sets
-train_df <- df[df$month_year < as.Date("2022-06-01"),]
-test_df <- df[df$month_year >= as.Date("2022-06-02"),]
-
-# Convert the training set's value_CP column to a time series object with frequency 12
-train_ts <- ts(train_df$value_CP, frequency = 12)
-
-# Fit the ARIMA model
-arima_model <- auto.arima(train_ts)
-
-
-future_months <- length(test_df$month_year)
-predictions <- forecast(arima_model, h = future_months)
-
-
-comparison <- data.frame(actual = test_df$value_CP, predicted = predictions$mean)
-print(comparison)
-
 
