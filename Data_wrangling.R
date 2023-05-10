@@ -6,15 +6,12 @@ library(sf)
 library(readr)
 library(lubridate)
 library(httr)
-
+library(credentials)
 library(reshape2)
 
-<<<<<<< HEAD
-#comment from radu 
-=======
 
 
->>>>>>> 063006d2e1dfdbacb3cddefbfa6801bcfbc6ac89
+
 # TODO: ADD ELECTRICITY - GAS as predictor (or sth like this)
 
 # postcodes data 
@@ -143,7 +140,10 @@ postal_codes <- read.csv("datasets/postal_codes.csv", sep = ';')
 
 
 
-chargers_postal <- chargers_postal %>% left_join(geojson[,c(2,5)], by =join_by(Postal.Code == pc4_code))
+#chargers_postal <- chargers_postal %>% left_join(geojson[,c(2,5)], by =join_by(Postal.Code == pc4_code))
+
+chargers_postal <- left_join(chargers_postal, geojson[, c(2, 5)], 
+                             by = c("Postal.Code" = "pc4_code"))
 
 chargers_month[30,1] <- 'Bergen (L)'
 
@@ -210,9 +210,6 @@ full_data_wide$year  <- substr(full_data_wide$month_year, 2, 5)
 full_data_wide <- merge(full_data_wide, cars_data, by = c('year', 'postal_code'))
 
 full_data_wide <- full_data_wide[,-1]
-
-
-
 
 
 
