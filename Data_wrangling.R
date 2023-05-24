@@ -8,7 +8,7 @@ library(lubridate)
 library(httr)
 library(credentials)
 library(reshape2)
-library(tidyr)
+
 
 
 
@@ -135,11 +135,6 @@ postal_codes <- read.csv("datasets/postal_codes.csv", sep = ';')
 
 
 
-
-
-
-
-
 #chargers_postal <- chargers_postal %>% left_join(geojson[,c(2,5)], by =join_by(Postal.Code == pc4_code))
 
 chargers_postal <- left_join(chargers_postal, geojson[, c(2, 5)], 
@@ -148,9 +143,9 @@ chargers_postal <- left_join(chargers_postal, geojson[, c(2, 5)],
 chargers_month[30,1] <- 'Bergen (L)'
 
 
-Chargers_month_final <- chargers_postal %>% left_join(chargers_month, by = join_by(gem_name == City))
+#Chargers_month_final <- chargers_postal %>% left_join(chargers_month, by = join_by(gem_name == City))
 
-
+Chargers_month_final <- left_join(chargers_postal, chargers_month, by = c("gem_name" = "City"))
 
 Chargers_month_final[,c(7:42)] <-Chargers_month_final$percentage * Chargers_month_final[,c(7:42)]
 
@@ -212,37 +207,16 @@ full_data_wide <- merge(full_data_wide, cars_data, by = c('year', 'postal_code')
 full_data_wide <- full_data_wide[,-1]
 
 
-
-# Replace 'y' with ''
-full_data_wide$month_year <- gsub("y", "", full_data_wide$month_year)
-full_data_wide$month_year <- gsub(".m", "-", full_data_wide$month_year)
-# Add '-01' to the end of each date to create a full date format (YYYY-MM-DD)
-full_data_wide$month_year <- paste(full_data_wide$month_year, "-01", sep="")
-
-# Convert the column to Date format
-full_data_wide$month_year <- as.Date(full_data_wide$month_year, format = "%Y-%m-%d")
-
-write_csv(full_data_wide, 'datasets/wide_data_modelling.csv')
-
-# TODO: Create mock data for monthly observations that will continue the trend
-
-# We use interpolation to simulate monthly data where we have only yearly
-
-
-# First we need to delete all the value in between the Januaries
-df <- full_data_wide
-df<- df %>% mutate(value_cars = ifelse(row_number() %% 12 == 1, value_cars, NA))
-
-# Then we interpolate the values in between
-
-df <- df %>%
-  group_by(postal_code) %>%
-  mutate(value_cars = approx(x = month_year, y = value_cars, xout = month_year, method = "linear", rule = 2)$y) %>%
-  ungroup()
-df$value_cars <- round(df$value_cars)
-
-full_data_wide <- df
-write_csv(full_data_wide, 'datasets/wide_data_modelling.csv')
-
+## Add postal codes with amenities
+amenities <- read.csv("datasets/Amenities_Categorical.csv")[,-2]
+colnames(amenities)[1] = "postal_code"
+#factorize amenities
+amenities[, 3:17] <- lapply(amenities[, 3:17], as.factor)
+#check for factorization
+str(amenities)
+#join with amenities
+full_data_wide_am <- left_join(full_data_wide, amenities, by = c("postal_code" = "postal_code"))
+#write new dataset with amenities
+write.csv(full_data_wide_am, file = "datasets/full_data_wide_am.csv")
 
 
