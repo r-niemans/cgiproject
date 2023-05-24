@@ -206,6 +206,19 @@ full_data_wide <- merge(full_data_wide, cars_data, by = c('year', 'postal_code')
 
 full_data_wide <- full_data_wide[,-1]
 
+str(full_data_wide)
+
+# Convert the month_year column to the "day-month-year" format
+# Replace 'y' with ''
+full_data_wide$month_year <- gsub("y", "", full_data_wide$month_year)
+full_data_wide$month_year <- gsub(".m", "-", full_data_wide$month_year)
+# Add '-01' to the end of each date to create a full date format (YYYY-MM-DD)
+full_data_wide$month_year <- paste(full_data_wide$month_year, "-01", sep="")
+# Convert the column to Date format
+full_data_wide$month_year <- as.Date(full_data_wide$month_year, format = "%Y-%m-%d")
+
+# Print the updated dataset
+print(full_data_wide)
 
 ## Add postal codes with amenities
 amenities <- read.csv("datasets/Amenities_Categorical.csv")[,-2]
@@ -218,5 +231,4 @@ str(amenities)
 full_data_wide_am <- left_join(full_data_wide, amenities, by = c("postal_code" = "postal_code"))
 #write new dataset with amenities
 write.csv(full_data_wide_am, file = "datasets/full_data_wide_am.csv")
-
 
