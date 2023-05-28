@@ -62,10 +62,19 @@ To get started with the Smart Service Project, follow these steps:
 
 ## Datasets
 
-| #  | Datasets | Source | Link |
+| #  | Datasets | Source | 
 | ------------- | ------------- | ------------- |
-| Content Cell  | Content Cell  | Content Cell  |
-| Content Cell  | Content Cell  | Content Cell  |
+| 1  | Amenities_Categorical.csv | [CBS](https://www.cbs.nl/nl-nl/dossier/nederland-regionaal/geografische-data/gegevens-per-postcode)  |
+| 2  | BEV 2020.csv, BEV 2021.csv, BEV 2022.csv  | Content Cell  |
+| 3  | Chargers_limburg.csv  |   |
+| 4  | Fuel_prices.csv  |   |
+| 5  | PHEV 2020.csv, PHEV 2021.csv, PHEV 2022.csv  |   |
+| 6  | Public Fast 2020.csv, Public Fast 2021.csv, Public Fast 2022.csv  |   |
+| 7  | Public Regular 2020.csv, Public Regular 2021.csv, Public Regular 2022.csv  |   |
+| 8  | Semi-Public Fast 2020.csv, Semi-Public Fast 2021.csv, Semi-Public Fast 2022.csv  |   |
+| 9  | Semi-Public Regular 2020.csv, Semi-Public Regular 2021.csv, Semi-Public Regular 2022.csv  |   |
+| 10  | cars_limburg.csv |   |
+
 
 ## Data Wrangling
 
