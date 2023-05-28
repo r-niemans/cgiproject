@@ -15,6 +15,7 @@ library(rstan)
 library(loo)
 library(bayesplot)
 library(rstantools)
+library(MLmetrics)
 
 # Adding lagged values
 df <- read.csv('datasets/wide_data_modelling.csv')
@@ -41,7 +42,6 @@ df$postal_code <- as.integer(as.factor(df$postal_code))
 # We also need to standardize the data 
 # TODO: Unstandardize it before plotting the data!!!
 
-df[,-c(1,2)] <- scale(df[,-c(1,2)])
 
 # We sample certain percentage of postal codes
 PC_sample <- sample(unique(df$postal_code), 50)
@@ -110,19 +110,19 @@ generated quantities {
   }
 }'
 
-model_data <- list(N = nrow(test_df),
-                   postal_code = test_df$postal_code,
-                   mon_price = scale(test_df$monthly_price)[,1],
-                   diff_EV = scale(test_df$diff_EV)[,1],
-                   diff_cars = scale(test_df$diff_cars)[,1],
-                   CP = scale(test_df$diff_CP)[,1],
-                   lag_1 =scale(test_df$lag_CP_1)[,1],
-                   lag_2 = scale(test_df$lag_CP_2)[,1],
-                   lag_3 = scale(test_df$lag_CP_3)[,1],
-                   lag_EV = scale(test_df$lag_EV)[,1],
-                   N_postal_codes = length(unique(test_df$postal_code)),
+model_data <- list(N = nrow(train_df),
+                   postal_code = train_df$postal_code,
+                   mon_price = scale(train_df$monthly_price)[,1],
+                   diff_EV = scale(train_df$diff_EV)[,1],
+                   diff_cars = scale(train_df$diff_cars)[,1],
+                   CP = scale(train_df$diff_CP)[,1],
+                   lag_1 =scale(train_df$lag_CP_1)[,1],
+                   lag_2 = scale(train_df$lag_CP_2)[,1],
+                   lag_3 = scale(train_df$lag_CP_3)[,1],
+                   lag_EV = scale(train_df$lag_EV)[,1],
+                   N_postal_codes = length(unique(train_df$postal_code)),
                    lag = 3)
-
+??unscale
 
 #### prior predictive check ####
 
@@ -260,16 +260,40 @@ for(i in 1:model_data$N_postal_codes){
 
 
 ##### Using data to make predictions ####
-newdata <- list(model_data <- list(N = nrow(test_df),
+newdata <- list(N = nrow(test_df),
                                    postal_code = test_df$postal_code,
                                    mon_price = scale(test_df$monthly_price)[,1],
                                    diff_EV = scale(test_df$diff_EV)[,1],
                                    diff_cars = scale(test_df$diff_cars)[,1],
-                                   CP = scale(test_df$diff_CP)[,1],
+                                  # CP = scale(test_df$diff_CP)[,1],
                                    lag_1 =scale(test_df$lag_CP_1)[,1],
                                    lag_2 = scale(test_df$lag_CP_2)[,1],
                                    lag_3 = scale(test_df$lag_CP_3)[,1],
                                    lag_EV = scale(test_df$lag_EV)[,1],
                                    N_postal_codes = length(unique(test_df$postal_code)),
                                    lag = 3)
-pred <- posterior_predict(fit, newdata)
+
+
+# Create a mapping from postal_code to column index in eta_PC
+postal_code_mapping <- match(newdata$postal_code, levels(as.factor(model_data$postal_code)))
+
+# compute mean effect for each observation in newdata
+eta_PC_samples <- rowMeans(param.sims$eta_PC[, postal_code_mapping])
+
+newdata$preds <- data.frame(matrix(ncol =300, nrow = 2000))
+for (i in 1:length(newdata$postal_code)) {
+  preds <- param.sims$alpha + param.sims$beta1 * newdata$mon_price[i] + param.sims$beta2 * newdata$diff_cars[i]+
+    param.sims$phi1 * newdata$lag_1[i] + param.sims$phi2 * newdata$lag_2[i] + param.sims$eta_PC[newdata$postal_code[i]]
+  newdata$preds[,i] <- preds
+}
+
+
+# Calculating the point evaluation metrics
+
+mean_preds <- colMeans(newdata$preds)
+MAE(mean_preds, scale(test_df$diff_CP)[,1])
+
+
+# library DmWR needs to be downloaded from - https://cran.r-project.org/src/contrib/Archive/DMwR/?C=M;O=D
+library(DMwR)
+unscale(test_df, test_df)
