@@ -1,13 +1,14 @@
-# Smart Service Project CGI Team 1
+# Smart Service Project CGI Team 1 - Power Predict
 
-Welcome to the Smart Service Project! This repository contains the code and datasets for a student project aimed at developing a smart service solution to predict the number of electric vehicle (EV) charging stations per postal code and estimate their average energy consumption. This README file will guide you through the project, its objectives, and the structure of the repository.
+Welcome to the ! This repository contains the code and datasets for a student project aimed at developing a smart service solution to predict the number of electric vehicle (EV) charging stations per postal code and estimate their average energy consumption. This README file will guide you through the project, its objectives, and the structure of the repository.
 
 ## Table of contents
 * [Project Overview](#project-overview)
 * [Repository Structure](#repository-structure)
 * [Getting Started](#getting-started)
-* 
-*
+* [Requirements](#requirements)
+* [Data Wrangling](#data-wrangling)
+* [The team](#the-team)
 
 ## Project Overview
 
@@ -18,7 +19,11 @@ The Smart Service Project focuses on leveraging data analysis and machine learni
 The repository is organized as follows:
 
 ```kotlin
-├── data/
+├── models/
+│   ├── model_1.py
+│   ├── model_2.py
+│   └── ...
+├── datasets/
 │   ├── raw_data/
 │   │   ├── charging_stations.csv
 │   │   └── postal_code_data.csv
@@ -26,15 +31,6 @@ The repository is organized as follows:
 │       ├── cleaned_data.csv
 │       ├── feature_engineered_data.csv
 │       └── train_test_data.csv
-├── models/
-│   ├── model_1.py
-│   ├── model_2.py
-│   └── ...
-├── notebooks/
-│   ├── data_exploration.ipynb
-│   ├── data_preparation.ipynb
-│   ├── model_training.ipynb
-│   └── ...
 ├── .gitignore
 └── README.md
 ```
@@ -59,7 +55,7 @@ To get started with the Smart Service Project, follow these steps:
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-## Libraries used
+## Requirements
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
