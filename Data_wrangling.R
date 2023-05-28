@@ -168,22 +168,11 @@ Fuel_prices <- Fuel_prices %>% group_by(year(Perioden), month(Perioden)) %>% sum
 
 
 
-# Mileage from cars - we need to wait for 2022 data (should be avaliable soon)
-mileage_2020 <- read.csv("datasets/mileage 2020.csv", sep = ';', row.names = 1)
-mileage_2021 <- read.csv("datasets/mileage 2021.csv", sep = ';', row.names = 1)
-
-total_mileage <- cbind(y2020 = mileage_2020[,1], y2021 = mileage_2021[,1])
-rownames(total_mileage) <- rownames(mileage_2020)
-mean_mileage <- cbind(y2020 = mileage_2020[,2], y2021 = mileage_2021[,2])
-rownames(mean_mileage) <- rownames(mileage_2020)
-
-
 full_data <- cbind(postal_code = Chargers_month_final[,2], CP = Chargers_month_final[,c(7:42)], EV = EV_month[,-1])
 
 
 cars_data <- read.csv('datasets/cars_limburg.csv')
 colnames(cars_data) <- c('postal_code', 'year', 'value_cars')
-write.csv(full_data, 'datasets/Full_data.csv')
 
 
 

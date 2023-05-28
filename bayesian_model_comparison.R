@@ -172,7 +172,7 @@ for (i in 1:length(pars)) {
       loo_result <- loo::loo(log_lik, r_eff = r_eff, cores = 8)
       
       # Save the loo object to a file
-      saveRDS(loo_result, file = paste0("loo_results/", paste(emotion_combination, collapse = "_"), "_", distribution, ".rds"))
+      saveRDS(loo_result, file = paste0("datasets/loo_results/", paste(emotion_combination, collapse = "_"), "_", distribution, ".rds"))
       
       # Print the current loop stage
       print(emotion_combination)
@@ -187,9 +187,9 @@ for (i in 1:length(pars)) {
 
 
 
-names_list <- list.files(path = "loo_results/",
+names_list <- list.files(path = "datasets/loo_results/",
                          pattern = ".rds", full.names = T)
-model_names <- gsub("loo_results//|\\.rds", "", names_list)
+model_names <- gsub("datasets/loo_results//|\\.rds", "", names_list)
 loos <- lapply(names_list, FUN =readRDS)
 
 comparison <- unlist(loo_compare(loos))
