@@ -8,6 +8,7 @@ Welcome to the ! This repository contains the code and datasets for a student pr
 * [Getting Started](#getting-started)
 * [Requirements](#requirements)
 * [Data Wrangling](#data-wrangling)
+* [Modeling](#modeling)
 * [The team](#the-team)
 
 ## Project Overview
@@ -59,12 +60,20 @@ To get started with the Smart Service Project, follow these steps:
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+## Datasets
+
+| #  | Datasets | Source | Link |
+| ------------- | ------------- | ------------- |
+| Content Cell  | Content Cell  | Content Cell  |
+| Content Cell  | Content Cell  | Content Cell  |
 
 ## Data Wrangling
 
 Add the Flow chart from Radu
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+## Modeling
 
 
 ## The team
