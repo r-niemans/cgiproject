@@ -15,6 +15,7 @@ library(rstan)
 library(loo)
 library(bayesplot)
 library(rstantools)
+library(MLmetrics)
 
 # Adding lagged values
 df <- read.csv('datasets/wide_data_modelling.csv')
@@ -121,7 +122,7 @@ model_data <- list(N = nrow(train_df),
                    lag_EV = scale(train_df$lag_EV)[,1],
                    N_postal_codes = length(unique(train_df$postal_code)),
                    lag = 3)
-
+??unscale
 
 #### prior predictive check ####
 
@@ -287,7 +288,12 @@ for (i in 1:length(newdata$postal_code)) {
 }
 
 
+# Calculating the point evaluation metrics
 
-hist(newdata$preds[,1])
-abline(v = test_df$value_CP[1], col = 'blue')
+mean_preds <- colMeans(newdata$preds)
+MAE(mean_preds, scale(test_df$diff_CP)[,1])
 
+
+# library DmWR needs to be downloaded from - https://cran.r-project.org/src/contrib/Archive/DMwR/?C=M;O=D
+library(DMwR)
+unscale(test_df, test_df)
