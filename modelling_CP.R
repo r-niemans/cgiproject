@@ -120,8 +120,7 @@ model_data <- list(N = nrow(train_df),
                    lag_2 = scale(train_df$lag_CP_2)[,1],
                    lag_3 = scale(train_df$lag_CP_3)[,1],
                    lag_EV = scale(train_df$lag_EV)[,1],
-                   N_postal_codes = length(unique(train_df$postal_code)),
-                   lag = 3)
+                   N_postal_codes = length(unique(train_df$postal_code)))
 ??unscale
 
 #### prior predictive check ####
@@ -294,6 +293,3 @@ mean_preds <- colMeans(newdata$preds)
 MAE(mean_preds, scale(test_df$diff_CP)[,1])
 
 
-# library DmWR needs to be downloaded from - https://cran.r-project.org/src/contrib/Archive/DMwR/?C=M;O=D
-library(DMwR)
-unscale(test_df, test_df)

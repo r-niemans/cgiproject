@@ -1,3 +1,4 @@
+# FINALVERSION!
 rm(list = ls())
 library(rstan)
 library(loo)
@@ -27,7 +28,7 @@ df$postal_code <- as.integer(as.factor(df$postal_code))
 
 # scale the data
 
-df[,-c(1,2,4)] <- scale(df[,-c(1,2,4)])[,1]
+df[,-c(1,2)] <- scale(df[,-c(1,2)])[,1]
 
 # adding factor variables
 df <- cbind(df, read.csv('datasets/full_data_wide_am.csv')[,c(9,10,13,15)])
@@ -62,17 +63,14 @@ model_data <- list(N = nrow(train_df),
                    lag_3 = train_df$lag_CP_3,
                    lag_EV = train_df$lag_EV,
                    Supermarket = train_df$Supermarket,
-                   Conv_store = train_df$Convenience.stores,
+                   Hotel = train_df$Hotel,
                    Railw_st = train_df$Railway.station,
                    N_postal_codes = length(unique(train_df$postal_code)))
 
-# Define your pars
-sum <- 0
-for (i in 4:7){
-x<- ncol(combn(c(1:8),i))
-sum <- sum + x}
 
-pars <- c(names(model_data)[-c(1,2,7,6,12,14)])
+pars <- c(names(model_data)[-c(1,2,7,6,14)])
+
+
 
 distributions <- c("normal", "student_t")
 
@@ -86,17 +84,25 @@ for (i in 1:length(pars)) {
     distribution <- distributions[k]
     
     if (!is.matrix(combinations)) {
-      emotion_combination <- combinations 
+      par_combination <- combinations 
     }
     
     for (j in 1:ncol(combinations)) {
-      emotion_combination <- combinations[,j]
+      par_combination <- combinations[,j]
       
+      
+      output_file <- paste0("datasets/loo_results/", paste(par_combination, collapse = "_"), "_", distribution, ".rds")
+      
+      # Check if the file already exists
+      if(file.exists(output_file)){
+        # If the file exists, skip to the next iteration
+        next
+      }
       # Build the model code
       model_code <- paste0("
         data {
           int<lower=0> N;
-          ", paste(paste0("vector[N] ", emotion_combination), collapse = "; "), ";
+          ", paste(paste0("vector[N] ", par_combination), collapse = "; "), ";
           vector[N] lag_1;
   int postal_code[N]; // vector of postal code per observation
   int N_postal_codes; // number of postal codes
@@ -106,7 +112,7 @@ for (i in 1:length(pars)) {
         parameters {
           real alpha;
           real<lower=0> sigma;
-          ", paste(paste0("real psi_", emotion_combination), collapse = "; "), ";
+          ", paste(paste0("real psi_", par_combination), collapse = "; "), ";
           real beta;
           vector[N_postal_codes] eta_raw;
           real<lower = 0> sigma_eta;
@@ -114,11 +120,11 @@ for (i in 1:length(pars)) {
         }
         transformed parameters {
           vector[N_postal_codes] eta = sigma_eta * eta_raw;
-          vector[N] mu = alpha + ", paste(paste0("psi_", emotion_combination, " * ", emotion_combination), collapse = " + "), " + beta * lag_1  + eta[postal_code];
+          vector[N] mu = alpha + ", paste(paste0("psi_", par_combination, " * ", par_combination), collapse = " + "), " + beta * lag_1  + eta[postal_code];
         }
         model {
           alpha ~ normal(0,1);
-          ", paste(paste0("psi_", emotion_combination, " ~ normal(0,1)"), collapse = "; "), ";
+          ", paste(paste0("psi_", par_combination, " ~ normal(0,1)"), collapse = "; "), ";
           beta ~ normal(0,1); // coef of lag1
           eta_raw ~ normal(0,1);
           sigma_eta ~ normal(0,1);
@@ -164,7 +170,7 @@ for (i in 1:length(pars)) {
                   thin = 4, 
                   cores = 8,
                   chains = 8,
-                  refresh = 100) # This line suppresses the output from Stan
+                  refresh = 1000) # This line suppresses the output from Stan
       
       # Compute the loo
       log_lik <- extract_log_lik(fit, merge_chains = FALSE)
@@ -172,10 +178,9 @@ for (i in 1:length(pars)) {
       loo_result <- loo::loo(log_lik, r_eff = r_eff, cores = 8)
       
       # Save the loo object to a file
-      saveRDS(loo_result, file = paste0("datasets/loo_results/", paste(emotion_combination, collapse = "_"), "_", distribution, ".rds"))
-      
+      saveRDS(loo_result, file = output_file)      
       # Print the current loop stage
-      print(emotion_combination)
+      print(par_combination)
       print(distribution)
       
       # Clean the environment, but keep the necessary variables
