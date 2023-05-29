@@ -218,6 +218,23 @@ amenities[, 3:17] <- lapply(amenities[, 3:17], as.factor)
 str(amenities)
 #join with amenities
 full_data_wide_am <- left_join(full_data_wide, amenities, by = c("postal_code" = "postal_code"))
+
+# finally we interpolate missing values for cars
+# First we need to delete all the value in between the Januaries
+full_data_wide_am<- full_data_wide_am %>% mutate(value_cars = ifelse(row_number() %% 12 == 1, value_cars, NA))
+
+# Then we interpolate the values in between
+
+full_data_wide_am <- full_data_wide_am %>%
+  group_by(postal_code) %>%
+  mutate(value_cars = approx(x = month_year, y = value_cars, xout = month_year, method = "linear", rule = 2)$y) %>%
+  ungroup()
+full_data_wide_am$value_cars <- round(full_data_wide_am$value_cars)
+
+
+
+
+
 #write new dataset with amenities
 write.csv(full_data_wide_am, file = "datasets/full_data_wide_am.csv")
 
