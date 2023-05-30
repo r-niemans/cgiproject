@@ -1,4 +1,4 @@
-#readme-top
+
 # Smart Service Project CGI Team 1 - Power Predict
 
 Welcome to the ! This repository contains the code and datasets for a student project aimed at developing a smart service solution to predict the number of electric vehicle (EV) charging stations per postal code and estimate their average energy consumption. This README file will guide you through the project, its objectives, and the structure of the repository.
@@ -10,7 +10,7 @@ Welcome to the ! This repository contains the code and datasets for a student pr
 * [Requirements](#requirements)
 * [Data Wrangling](#data-wrangling)
 * [Modeling](#modeling)
-* [The Final Product - Interactive Dashboard](#the-final-product-interactive-dashboard)
+* [Dashboard](#dashboard)
 * [The team](#the-team)
 
 ## Project Overview
@@ -66,6 +66,7 @@ The repository is organized as follows:
 | 12 | full_data_wide_am.csv| The final dataset with independent and dependent variables per postal code for 2020-2022 | Output of data wrangling.R script|
 | 13 | | | 
 
+<p align="right">(<a href="#project-overview">back to top</a>)</p>
 
 
 ## Getting Started
@@ -76,11 +77,11 @@ To get started with the Smart Service Project, follow these steps:
 
 2. **Set up the environment**: Create a virtual environment for the project and activate it. Install the necessary dependencies by running the following command:
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+<p align="right">(<a href="#project-overview">back to top</a>)</p>
 
 ## Requirements
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+<p align="right">(<a href="#project-overview">back to top</a>)</p>
 
 In order to replicate the results of this project, you will need R version 4.2.3. and Rstudio. All the required libraries are indicated in R scripts files. 
 
@@ -89,7 +90,7 @@ In order to replicate the results of this project, you will need R version 4.2.3
 
 Add the Flow chart from Radu
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+<p align="right">(<a href="#project-overview">back to top</a>)</p>
 
 ## Modeling
 
@@ -109,9 +110,12 @@ Moving on to the dashboard's right side, as initially outlined, a collection of 
 
 In the dashboard's ultimate version, it will incorporate supplementary data and charts, including projections of electric vehicle numbers per postal code, anticipated gas prices, and crucially, the forecasted number of charging points per postal code by 2030. 
 
+<p align="right">(<a href="#project-overview">back to top</a>)</p>
+
 
 
 ## The team
 
+<p align="right">(<a href="#project-overview">back to top</a>)</p>
 
 
