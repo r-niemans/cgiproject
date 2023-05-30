@@ -17,11 +17,10 @@ Lunara Dossayeva i6316054
 * [Project Overview](#project-overview)
 * [Repository Structure](#repository-structure)
 * [Getting Started](#getting-started)
-* [Requirements](#requirements)
 * [Data Wrangling](#data-wrangling)
 * [Modeling](#modeling)
 * [Dashboard](#dashboard)
-* [The team](#the-team)
+
 
 ## Project Overview
 
@@ -83,23 +82,11 @@ The repository is organized as follows:
 
 <p align="right">(<a href="#project-overview">back to top</a>)</p>
 
-
-## Getting Started
-
-To get started with the Smart Service Project, follow these steps:
-
-1. **Clone the repository**: Start by cloning this repository to your local machine using Git or download it as a ZIP file and extract its contents.
-
-2. **Set up the environment**: Create a virtual environment for the project and activate it. Install the necessary dependencies by running the following command:
-
-<p align="right">(<a href="#project-overview">back to top</a>)</p>
-
 ## Requirements
 
 <p align="right">(<a href="#project-overview">back to top</a>)</p>
 
 In order to replicate the results of this project, you will need R version 4.2.3. and Rstudio. All the required libraries are indicated in R scripts files. 
-
 
 ## Data Wrangling
 
