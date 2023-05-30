@@ -53,7 +53,7 @@ The repository is organized as follows:
 
 - `EV prediction.R`: This is an R script file .
 
-- `Fuel prcies forecast.R`: This is an R script file used for fule prices forecasting to facilitate forecasting of electric vehicles and EV charging points.
+- `Fuel prices forecast.R`: This is an R script file used for fule prices forecasting to facilitate forecasting of electric vehicles and EV charging points.
 
 - `power demand.R`: This is an R script file used to obtain the average energy consumption per random samples EV charging stations in the Netherlands over a year.
 
