@@ -23,16 +23,17 @@ geojson <- st_read("datasets/georef-netherlands-postcode-pc4.geojson")
 geojson <- st_set_geometry(geojson, NULL)
 geojson$pc4_code <- as.numeric(geojson$pc4_code)
 
-
+# loading the datasets per year for the amount of Electrical Vehicles per postal code 
 EV_2020 <- read.csv("datasets/BEV 2020.csv", sep = ";", row.names = NULL)
 EV_2021 <- read.csv("datasets/BEV 2021.csv", sep = ";", row.names = NULL)
 EV_2022 <- read.csv("datasets/BEV 2022.csv", sep = ";", row.names = NULL)
 
+# loading the datasets per year for the amount of Plug-in Hybride Vehicles per postal code 
 PHEV_2020 <- read.csv("datasets/PHEV 2020.csv", sep = ";", row.names = NULL)
 PHEV_2021 <- read.csv("datasets/PHEV 2021.csv", sep = ";", row.names = NULL)
 PHEV_2022 <- read.csv("datasets/PHEV 2022.csv", sep = ";", row.names = NULL)
 
-
+# change the column names to months per 2020,2021 and 2022 
 colnames(EV_2020) <- c('code', paste0('m',c(1:12)))
 colnames(EV_2021) <- c('code', paste0('m',c(1:12)))
 colnames(EV_2022) <- c('code', paste0('m',c(1:12)))
@@ -41,6 +42,7 @@ colnames(PHEV_2020) <- c('code', paste0('m',c(1:12)))
 colnames(PHEV_2021) <- c('code', paste0('m',c(1:12)))
 colnames(PHEV_2022) <- c('code', paste0('m',c(1:12)))
 
+# load all the charger points in Limburg
 data_chargers <- read.csv('datasets/Chargers_limburg.csv', row.names = NULL, sep = ';')
 
 
@@ -50,8 +52,11 @@ data_chargers$Postal.Code <- readr::parse_number(data_chargers$Postal.Code)
 # counting chargers per postal code (for 2023)
 chargers_postal <- data_chargers %>% count(Postal.Code)
 
-
-chargers_postal <- merge(chargers_postal, geojson[,c(2,5)], by.x ='Postal.Code', by.y =  'pc4_code')
+# merging the charging points per postal codes 
+chargers_postal <- merge(chargers_postal, 
+                         geojson[,c(2,5)], 
+                         by.x ='Postal.Code', 
+                         by.y =  'pc4_code')
 
 colnames(chargers_postal) <- c('Postal.Code', 'n', 'City')
 # chargers_postal <- merge(chargers_postal, data_chargers[,c(2,3)], by = 'Postal.Code')
@@ -78,22 +83,24 @@ EV_month$postal_code <-readr::parse_number(EV_month$postal_code)
 
 
 
-#### Chargers!! ####
+#### Loading the different types of chargers ####
 
+# public charging points
 public_regular_2020 <- read.csv('datasets/Public regular 2020.csv', sep = ";", row.names = NULL)
 public_regular_2021 <- read.csv('datasets/Public regular 2021.csv', sep = ";", row.names = NULL)
 public_regular_2022 <- read.csv('datasets/Public regular 2022.csv', sep = ";", row.names = NULL)
 
-
+# public fast chargers
 public_fast_2020 <- read.csv('datasets/Public fast 2020.csv', sep = ";", row.names = NULL)
 public_fast_2021 <- read.csv('datasets/Public fast 2021.csv', sep = ";", row.names = NULL)
 public_fast_2022 <- read.csv('datasets/Public fast 2022.csv', sep = ";", row.names = NULL)
 
-
+# semi public chargers
 semi_public_regular_2020 <- read.csv('datasets/Semi-Public regular 2020.csv', sep = ";", row.names = NULL)
 semi_public_regular_2021 <- read.csv('datasets/Semi-Public regular 2021.csv', sep = ";", row.names = NULL)
 semi_public_regular_2022 <- read.csv('datasets/Semi-Public regular 2022.csv', sep = ";", row.names = NULL)
 
+# semi public fast chargers
 semi_public_fast_2020 <- read.csv('datasets/Semi-Public fast 2020.csv', sep = ";", row.names = NULL)
 semi_public_fast_2021 <- read.csv('datasets/Semi-Public fast 2021.csv', sep = ";", row.names = NULL)
 semi_public_fast_2022 <- read.csv('datasets/Semi-Public fast 2022.csv', sep = ";", row.names = NULL)
@@ -116,14 +123,13 @@ colnames(semi_public_fast_2021) <- c('City', paste0('m',c(1:12)))
 colnames(semi_public_fast_2022) <- c('City', paste0('m',c(1:12)))
 
 
-
+# merging the types of chargers dataframes with one another
 chargers_month <- cbind(City = semi_public_fast_2020[,1], y2020 = public_regular_2020[,-1] + public_fast_2020[,-1] + semi_public_fast_2020[,-1] +
                           semi_public_regular_2020[,-1],  y2021 = public_regular_2021[,-1] + public_fast_2021[,-1] + semi_public_fast_2021[,-1] +
                           semi_public_regular_2021[,-1],  y2022 = public_regular_2022[,-1] + public_fast_2022[,-1] + semi_public_fast_2022[,-1] +
                           semi_public_regular_2022[,-1])
 
-
-
+# summing up the charging points per city
 chargers_postal_sum <- chargers_postal %>% group_by(City) %>% summarise(sum = sum(n))
 
 chargers_postal <- merge(chargers_postal, chargers_postal_sum, by = 'City')
@@ -134,62 +140,78 @@ chargers_postal$percentage <- chargers_postal$n/chargers_postal$sum
 postal_codes <- read.csv("datasets/postal_codes.csv", sep = ';')
 
 
-
-#chargers_postal <- chargers_postal %>% left_join(geojson[,c(2,5)], by =join_by(Postal.Code == pc4_code))
-
 chargers_postal <- left_join(chargers_postal, geojson[, c(2, 5)], 
                              by = c("Postal.Code" = "pc4_code"))
 
 chargers_month[30,1] <- 'Bergen (L)'
 
+Chargers_month_final <- left_join(chargers_postal, 
+                                  chargers_month, 
+                                  by = c("gem_name" = "City"))
 
-#Chargers_month_final <- chargers_postal %>% left_join(chargers_month, by = join_by(gem_name == City))
+# performing element-wise multiplication of the 'percentage' column with each of the columns 7 through 42
 
-Chargers_month_final <- left_join(chargers_postal, chargers_month, by = c("gem_name" = "City"))
-
-Chargers_month_final[,c(7:42)] <-Chargers_month_final$percentage * Chargers_month_final[,c(7:42)]
-
+Chargers_month_final[,c(7:42)] <- Chargers_month_final$percentage * Chargers_month_final[,c(7:42)]
 
 
 Chargers_month_final[,c(7:42)] <- round(Chargers_month_final[,c(7:42)])
 
 
-# Creating a subset of EV df that captures only postcodes from Limburg area
+# creating a subset of EV dataframe that captures only postcodes from the Limburg area
 
 EV_month <- subset(EV_month, postal_code %in% Chargers_month_final$Postal.Code)
 
 
 
+# loading another external dataset containing fuel prices, from 2006 to April 2023
 
 Fuel_prices <- read.csv("datasets/Fuel_prices.csv", sep = ';')
 Fuel_prices$Perioden <- ymd(Fuel_prices$Perioden)
 
-Fuel_prices <- Fuel_prices %>% group_by(year(Perioden), month(Perioden)) %>% summarise(monthly_price = mean(BenzineEuro95_1))
+# filter only on the monthly average of the fuel 'Euro95' 
+Fuel_prices <- Fuel_prices %>% 
+group_by(year(Perioden), month(Perioden)) %>% 
+summarise(monthly_price = mean(BenzineEuro95_1))
 
 
+full_data <- cbind(postal_code = Chargers_month_final[,2], 
+                   CP = Chargers_month_final[,c(7:42)], 
+                   EV = EV_month[,-1])
 
-full_data <- cbind(postal_code = Chargers_month_final[,2], CP = Chargers_month_final[,c(7:42)], EV = EV_month[,-1])
-
-
+# importing the amount of regular cars per year and postal code
 cars_data <- read.csv('datasets/cars_limburg.csv')
 colnames(cars_data) <- c('postal_code', 'year', 'value_cars')
 
 
 
-
-EV_month_long <- gather(EV_month, key = "month_year", value = "value", -1)
-CP_month_long <- gather(Chargers_month_final[,c(2,7:42)], key = "month_year", value = "value", -1)
+# retrieving the EV and CP values per month and adding column names to the columns
+EV_month_long <- gather(EV_month, 
+                        key = "month_year", 
+                        value = "value", -1)
+CP_month_long <- gather(Chargers_month_final[,c(2,7:42)], 
+                        key = "month_year", 
+                        value = "value", -1)
 colnames(CP_month_long) <- c("postal_code", "month_year",  "value")
-merged_df <- merge(EV_month_long, CP_month_long, by = c("postal_code", "month_year"),
-                   all.x = TRUE,suffixes = c("_EV", "_CP"))
+
+merged_df <- merge(EV_month_long, 
+                   CP_month_long, 
+                   by = c("postal_code", "month_year"),
+                   all.x = TRUE,
+                   suffixes = c("_EV", "_CP"))
 
 Fuel_prices$month_year <- paste0('y',Fuel_prices$`year(Perioden)`,'.m',Fuel_prices$`month(Perioden)`)
 full_data_wide <- merge(merged_df, Fuel_prices[,c(3,4)], by = c('month_year'))
-# changing y2020.m1 to y2020.m01
-full_data_wide$month_year <- str_replace(full_data_wide$month_year, "(?<=\\.m)\\d(?=$)", sprintf("%02d", as.integer(str_extract(full_data_wide$month_year, "(?<=\\.m)\\d(?=$)"))))
+# changing y2020.m1 to format of y2020.m01
+full_data_wide$month_year <- str_replace(full_data_wide$month_year, 
+                                         "(?<=\\.m)\\d(?=$)", 
+                                         sprintf("%02d", 
+                                         as.integer(str_extract(full_data_wide$month_year, 
+                                         "(?<=\\.m)\\d(?=$)"))))
 
+# rearranging the rows of full_data_wide in ascending order first by postal_code and then by month_year
 full_data_wide <- full_data_wide %>% arrange(postal_code, month_year)
 
+# extracting substrings in a character vector to create a new column, year, in full_data_wide that contains 
 full_data_wide$year  <- substr(full_data_wide$month_year, 2, 5)
 full_data_wide <- merge(full_data_wide, cars_data, by = c('year', 'postal_code'))
 
@@ -209,25 +231,34 @@ full_data_wide$month_year <- as.Date(full_data_wide$month_year, format = "%Y-%m-
 # Print the updated dataset
 print(full_data_wide)
 
-## Add postal codes with amenities
+# load and add postal codes with amenities
 amenities <- read.csv("datasets/Amenities_Categorical.csv")[,-2]
 colnames(amenities)[1] = "postal_code"
-#factorize amenities
+
+# factorize amenities
 amenities[, 3:17] <- lapply(amenities[, 3:17], as.factor)
+
 #check for factorization
 str(amenities)
+
 #join with amenities
-full_data_wide_am <- left_join(full_data_wide, amenities, by = c("postal_code" = "postal_code"))
+full_data_wide_am <- left_join(full_data_wide, 
+                               amenities, 
+                               by = c("postal_code" = "postal_code"))
 
 # finally we interpolate missing values for cars
-# First we need to delete all the value in between the Januaries
+# first we need to delete all the value in between the Januaries
 full_data_wide_am<- full_data_wide_am %>% mutate(value_cars = ifelse(row_number() %% 12 == 1, value_cars, NA))
 
 # Then we interpolate the values in between
 
 full_data_wide_am <- full_data_wide_am %>%
   group_by(postal_code) %>%
-  mutate(value_cars = approx(x = month_year, y = value_cars, xout = month_year, method = "linear", rule = 2)$y) %>%
+  mutate(value_cars = approx(x = month_year, 
+                             y = value_cars, 
+                             xout = month_year, 
+                             method = "linear", 
+                             rule = 2)$y) %>%
   ungroup()
 full_data_wide_am$value_cars <- round(full_data_wide_am$value_cars)
 
