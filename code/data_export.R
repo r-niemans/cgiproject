@@ -11,9 +11,9 @@ hist_data$value_EV_pesimistic <- hist_data$value_EV
 
 hist_data$value_CP_optimistic <- hist_data$value_CP
 hist_data$value_CP_pesimistic <- hist_data$value_CP
-pred_EV <- read.csv('datasets/prediction_ev_prophet.csv')[,c(2,18,17,14,13)]
-pred_CP <- read.csv('datasets/prediction_cp_prophet.csv')[,c(2,18,17,14,13)]
-pred_price <- read.csv('datasets/prediction_gas.csv')
+pred_EV <- read.csv('output/prediction_ev_prophet.csv')[,c(2,18,17,14,13)]
+pred_CP <- read.csv('output/prediction_cp_prophet.csv')[,c(2,18,17,14,13)]
+pred_price <- read.csv('output/prediction_gas.csv')
 
 pred_EV$month_year <- ymd(pred_EV$month_year)
 pred_CP$month_year <- ymd(pred_CP$month_year)
@@ -39,7 +39,7 @@ forecast_data <- tibble(postal_code = pred_EV$postal_code, month_year = pred_EV$
 export_data <- rbind(hist_data, forecast_data)
 
 
-
+# geojson file is too large to be uploaded on github
 geojson <- st_read("datasets/georef-netherlands-postcode-pc4.geojson")
 
 # For now we drop the geometry
