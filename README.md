@@ -36,30 +36,23 @@ The final product of the solution comes in the dashboard for the usage of the sm
 The repository is organized as follows:
 
 ```kotlin
-├── Data_wrangling.R
-├── EV prediction.R
-├── Fuel prices forecast.R
-├── bayesian_model_comparison.R
-├── cgiproject.Rproj
-├── modeling_CP.R
-├── power demand.R
+├── code/
 ├── datasets/
+├── output/
 └── README.md
 ```
 
 - `README.R`: This file contains project description, structure and requirements.
 
-- `Data wrangling.R`: This is an R script file used to clean the datasets from `datasets\` folder and join them together for the modeling part.
-
-- `EV prediction.R`: This is an R script file .
-
-- `Fuel prices forecast.R`: This is an R script file used for fule prices forecasting to facilitate forecasting of electric vehicles and EV charging points.
-
-- `power demand.R`: This is an R script file used to obtain the average energy consumption per random samples EV charging stations in the Netherlands over a year.
+- `code/`: This folder contains all the R scripts used for data preparation and modeling.
 
 - `datasets/`: This folder contains all the raw datasets needed for the modeling and forecasting as well as the output datasets from forecasting. The detailed list of the datasets can be found in the datasets table below. 
 
+- `output/`: This folder contains all the output data sets with forecast and Tableau data and dashboard.
+
 - `README.md`: The file you are currently reading. It serves as an overview and guide for the project.
+
+The list of data sets and their sources in the data set folder:
 
 | #  | Datasets | Description | Source | 
 | ------------- | ------------- | ------------- | ------------- |
