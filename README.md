@@ -81,7 +81,7 @@ In order to replicate the results of this project, you will need R version 4.2.3
 
 ## Data Preparation
 
-The data preparation takes place in two R script files: "Data_wrangling.R" and "power demand.R" .
+The data preparation takes place in two R script files: "Data_wrangling.R" and "Power_usage_addition.R" .
 
 This Data wrangling code script involves multiple steps of data cleaning, merging, and transforming. Firstly, it imports various relevant datasets relating to electric vehicles (EVs), plug-in hybrid electric vehicles (PHEVs), charging points, fuel prices, and car registration data for postal code areas in the Netherlands, particularly focusing on Limburg. The data spans several years and is reshaped from wide to long format where deemed necessary. The code then computes aggregated measures and combines these datasets based on postal code and time, and integrates additional information about fuel prices and the number of regular cars. Finally, the code interpolates missing values for the number of cars, includes amenity information for each postal code, and saves the resulting comprehensive dataset as a CSV file that is being used to build and compose our final model.
 
