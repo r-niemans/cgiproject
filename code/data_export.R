@@ -52,5 +52,5 @@ export_data[,c(3,4,6,7,8,9)] <- round(export_data[,c(3,4,6,7,8,9)])
 export_data[,5] <- round(export_data[,5],2)
 
 
-write.csv(export_data, 'datasets/Tableu_data.csv')
+write.csv(export_data, 'output/Tableu_data.csv')
 
