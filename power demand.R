@@ -22,18 +22,18 @@ grouped_year <- energydemand %>%
   summarise(avg_pubdemand = mean(power_demand_public))
 
 energydemand <- data.frame(energydemand)
-# change to timeseries 
 
+# change to timeseries 
 vectordemand <- as.vector(energydemand$power_demand_public)
 vectordemand <- as.vector(grouped_month$avg_pubpower)
 
+# create a timeseries, based on 12 months
 energydemand_ts <- ts(vectordemand, start = c(2021, 1), end= c(2022,1), frequency = 12)
 
-?ts
 #plot(energydemand, xlab = "date_time", ylab = "power_demand_public", 
    #  main = "daily power_demand, insert days", type ="b")
 
-# this plot shows that the power demand goes up quite a lot in the last months, could be due to electrical vehicles increase or the fact 
+# this plot shows that the power demand goes up quite a lot in the last months, could be due to increase in electrical vehicles  or the fact 
 # that its winter and people take the cars more often 
 ggplot(grouped_month, aes(x = month, y = avg_pubpower)) +
   geom_line() +
