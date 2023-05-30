@@ -65,15 +65,17 @@ To get started with the Smart Service Project, follow these steps:
 | #  | Datasets | Source | 
 | ------------- | ------------- | ------------- |
 | 1  | Amenities_Categorical.csv | [CBS](https://www.cbs.nl/nl-nl/dossier/nederland-regionaal/geografische-data/gegevens-per-postcode)  |
-| 2  | BEV 2020.csv, BEV 2021.csv, BEV 2022.csv  | Content Cell  |
-| 3  | Chargers_limburg.csv  |   |
-| 4  | Fuel_prices.csv  |   |
-| 5  | PHEV 2020.csv, PHEV 2021.csv, PHEV 2022.csv  |   |
-| 6  | Public Fast 2020.csv, Public Fast 2021.csv, Public Fast 2022.csv  |   |
-| 7  | Public Regular 2020.csv, Public Regular 2021.csv, Public Regular 2022.csv  |   |
-| 8  | Semi-Public Fast 2020.csv, Semi-Public Fast 2021.csv, Semi-Public Fast 2022.csv  |   |
-| 9  | Semi-Public Regular 2020.csv, Semi-Public Regular 2021.csv, Semi-Public Regular 2022.csv  |   |
-| 10  | cars_limburg.csv |   |
+| 2  | BEV 2020.csv, BEV 2021.csv, BEV 2022.csv  | [CBS & RVO](https://klimaatmonitor.databank.nl/jive)|
+| 3  | Chargers_limburg.csv  | [CBS & RVO](https://klimaatmonitor.databank.nl/jive)|
+| 4  | Fuel_prices.csv  | "ID";"Perioden";"BenzineEuro95_1";"Diesel_2";"Lpg_3" |
+| 5  | PHEV 2020.csv, PHEV 2021.csv, PHEV 2022.csv  | [CBS & RVO](https://klimaatmonitor.databank.nl/jive)  |
+| 6  | Public Fast 2020.csv, Public Fast 2021.csv, Public Fast 2022.csv  | [CBS & RVO](https://klimaatmonitor.databank.nl/jive)  |
+| 7  | Public Regular 2020.csv, Public Regular 2021.csv, Public Regular 2022.csv  | [CBS & RVO](https://klimaatmonitor.databank.nl/jive)  |
+| 8  | Semi-Public Fast 2020.csv, Semi-Public Fast 2021.csv, Semi-Public Fast 2022.csv  | [CBS & RVO](https://klimaatmonitor.databank.nl/jive)  |
+| 9  | Semi-Public Regular 2020.csv, Semi-Public Regular 2021.csv, Semi-Public Regular 2022.csv  | [CBS & RVO](https://klimaatmonitor.databank.nl/jive)  |
+| 10  | cars_limburg.csv | CBS |
+| 11  | postal_code.csv | [CBS](https://www.cbs.nl/nl-nl/maatwerk/2022/37/buurt-wijk-en-gemeente-2022-voor-postcode-huisnummer) |
+
 
 
 ## Data Wrangling
