@@ -16,7 +16,7 @@ Lunara Dossayeva i6316054 <br>
 ## Table of contents
 * [Project Overview](#project-overview)
 * [Repository Structure](#repository-structure)
-* [Requirements Started](#requirements)
+* [Requirements](#requirements)
 * [Data Prepatation](#data-preparation)
 * [Modeling](#modeling)
 * [Dashboard](#dashboard)
