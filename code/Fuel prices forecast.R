@@ -57,4 +57,4 @@ for (postal_code in postal_codes) {
 # remove duplicates
 final_df_arima_f <- distinct(final_df_arima, postal_code, month_year, .keep_all = TRUE)
 
-write.csv(final_df_arima_f, file = "datasets/prediction_gas.csv")
+write.csv(final_df_arima_f, file = "output/prediction_gas.csv")
