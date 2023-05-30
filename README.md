@@ -44,7 +44,6 @@ The repository is organized as follows:
 ├── modeling_CP.R
 ├── power demand.R
 ├── datasets/
-├── .gitignore
 └── README.md
 ```
 
@@ -61,8 +60,6 @@ The repository is organized as follows:
 - `datasets/`: This folder contains all the raw datasets needed for the modeling and forecasting as well as the output datasets from forecasting. The detailed list of the datasets can be found in the datasets table below. 
 
 - `README.md`: The file you are currently reading. It serves as an overview and guide for the project.
-
-
 
 | #  | Datasets | Description | Source | 
 | ------------- | ------------- | ------------- | ------------- |
@@ -84,13 +81,15 @@ The repository is organized as follows:
 
 ## Requirements
 
-<p align="right">(<a href="#project-overview">back to top</a>)</p>
-
 In order to replicate the results of this project, you will need R version 4.2.3. and Rstudio. All the required libraries are indicated in R scripts files. 
 
-## Data Wrangling
+<p align="right">(<a href="#project-overview">back to top</a>)</p>
 
+## Data Preparation
 
+The data preparation takes place in two R script files: Data Wrangling and power demand.
+
+This Data wrangling code script involves multiple steps of data cleaning, merging, and transforming. Firstly, it imports various relevant datasets relating to electric vehicles (EVs), plug-in hybrid electric vehicles (PHEVs), charging points, fuel prices, and car registration data for postal code areas in the Netherlands, particularly focusing on Limburg. The data spans several years and is reshaped from wide to long format where deemed necessary. The code then computes aggregated measures and combines these datasets based on postal code and time, and integrates additional information about fuel prices and the number of regular cars. Finally, the code interpolates missing values for the number of cars, includes amenity information for each postal code, and saves the resulting comprehensive dataset as a CSV file that is being used to build and compose our final model.
 
 <p align="right">(<a href="#project-overview">back to top</a>)</p>
 
@@ -112,10 +111,4 @@ In the final version of the dashboard, clicking a postal code area will prompt a
 In the dashboard's ultimate version, it will incorporate supplementary data and charts, including projections of electric vehicle numbers per postal code, anticipated gas prices, and crucially, the forecasted number of charging points per postal code by 2030. 
 
 <p align="right">(<a href="#project-overview">back to top</a>)</p>
-
-
-
-
-<p align="right">(<a href="#project-overview">back to top</a>)</p>
-
 
