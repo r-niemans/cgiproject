@@ -76,6 +76,7 @@ The repository is organized as follows:
 | 11  | postal_code.csv | Gemeentes, provinces and their postal codes | [CBS](https://www.cbs.nl/nl-nl/maatwerk/2022/37/buurt-wijk-en-gemeente-2022-voor-postcode-huisnummer) |
 | 12 | full_data_wide_am.csv| The final dataset with independent and dependent variables per postal code for 2020-2022 | Output of data wrangling.R script|
 | 13 | Tableu_data.csv| The dataset to be uploaded to Tableau to generate dashboards | Output of Power_usage_ addition.R |
+| 14 | evdata.csv| The energy consumption by charging stations | [Elaad][https://platform.elaad.io/]|
 
 <p align="right">(<a href="#project-overview">back to top</a>)</p>
 
