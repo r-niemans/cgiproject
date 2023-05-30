@@ -54,5 +54,5 @@ for (postal_code in postal_codes) {
 
 final_df_prophet_ev <- final_df_prophet %>% rename(predicted_ev = yhat)
 final_df_prophet_ev <- final_df_prophet_ev %>% rename(month_year = ds)
-write.csv(final_df_prophet_ev, file = "datasets/prediction_ev_prophet.csv")
+write.csv(final_df_prophet_ev, file = "output/prediction_ev_prophet.csv")
 
