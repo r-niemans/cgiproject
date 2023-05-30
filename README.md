@@ -5,7 +5,7 @@ Welcome to the GitHub page of Smart Service Project CGI Team 1!
 
 This repository contains the code and datasets for a student project aimed at developing a smart service solution to predict the number of electric vehicle (EV) charging stations per postal code and estimate their average energy consumption. This README file will guide you through the project, its objectives, and the structure of the repository.
 
-## The team
+## Our Team
 
 Gustaw Kempa i6333296  <br>
 Radu Ionescu i6301965 <br>
@@ -13,7 +13,7 @@ Claudio Proietti Mercuri i6245870 <br>
 Rafke Niemans i6300274 <br>
 Lunara Dossayeva i6316054 <br>
 
-## Table of contents
+## Table of Contents
 * [Project Overview](#project-overview)
 * [Repository Structure](#repository-structure)
 * [Requirements](#requirements)
