@@ -7,17 +7,17 @@ This repository contains the code and datasets for a student project aimed at de
 
 ## The team
 
-Gustaw Kempa i6333296
-Radu Ionescu i6301965
-Claudio Proietti Mercuri i6245870
-Rafke Niemans i6300274
-Lunara Dossayeva i6316054
+Gustaw Kempa i6333296  <br>
+Radu Ionescu i6301965 <br>
+Claudio Proietti Mercuri i6245870 <br>
+Rafke Niemans i6300274 <br>
+Lunara Dossayeva i6316054 <br>
 
 ## Table of contents
 * [Project Overview](#project-overview)
 * [Repository Structure](#repository-structure)
-* [Getting Started](#getting-started)
-* [Data Wrangling](#data-wrangling)
+* [Requirements Started](#requirements)
+* [Data Prepatation](#data-preparation)
 * [Modeling](#modeling)
 * [Dashboard](#dashboard)
 
