@@ -41,9 +41,9 @@ hist_data$value_EV_pesimistic <- hist_data$value_EV
 
 hist_data$value_CP_optimistic <- hist_data$value_CP
 hist_data$value_CP_pesimistic <- hist_data$value_CP
-pred_EV <- read.csv('datasets/prediction_ev_prophet.csv')[,c(2,18,17,14,13)]
-pred_CP <- read.csv('datasets/prediction_cp_prophet.csv')[,c(2,18,17,14,13)]
-pred_price <- read.csv('datasets/prediction_gas.csv')
+pred_EV <- read.csv('output/prediction_ev_prophet.csv')[,c(2,18,17,14,13)]
+pred_CP <- read.csv('output/prediction_cp_prophet.csv')[,c(2,18,17,14,13)]
+pred_price <- read.csv('output/prediction_gas.csv')
 
 pred_EV$month_year <- ymd(pred_EV$month_year)
 pred_CP$month_year <- ymd(pred_CP$month_year)
@@ -97,4 +97,4 @@ export_data$optimistic_usage <- export_data$value_CP_optimistic * export_data$ch
 # Rename column 13
 colnames(export_data)[13] <- "kwh_used_month"
 
-write.csv(export_data, 'datasets/Tableu_data.csv')
+write.csv(export_data, 'output/Tableu_data.csv')
