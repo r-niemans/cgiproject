@@ -1,3 +1,4 @@
+#readme-top
 # Smart Service Project CGI Team 1 - Power Predict
 
 Welcome to the ! This repository contains the code and datasets for a student project aimed at developing a smart service solution to predict the number of electric vehicle (EV) charging stations per postal code and estimate their average energy consumption. This README file will guide you through the project, its objectives, and the structure of the repository.
@@ -9,7 +10,7 @@ Welcome to the ! This repository contains the code and datasets for a student pr
 * [Requirements](#requirements)
 * [Data Wrangling](#data-wrangling)
 * [Modeling](#modeling)
-* [The Final Product - Interactive Dashboard](#the_final_product_interactive_dashboard)
+* [The Final Product - Interactive Dashboard](#the-final-product-interactive-dashboard)
 * [The team](#the-team)
 
 ## Project Overview
