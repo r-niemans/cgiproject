@@ -15,11 +15,11 @@ ratio_2023 <- ev_2023/cp_2023
 
 ratio_2023
 
-prophet_cp_am <- read.csv("datasets/prediction_cp_prophet_am.csv", sep = ",")
-prophet_cp <- read.csv("datasets/prediction_cp_prophet.csv", sep = ",")
+prophet_cp_am <- read.csv("output/prediction_cp_prophet_am.csv", sep = ",")
+prophet_cp <- read.csv("output/prediction_cp_prophet.csv", sep = ",")
 
-prophet_ev <- read.csv("datasets/prediction_ev_prophet.csv", sep = ",")
-prophet_ev_am <- read.csv("datasets/prediction_ev_am_prophet.csv", sep = ",")
+prophet_ev <- read.csv("output/prediction_ev_prophet.csv", sep = ",")
+prophet_ev_am <- read.csv("output/prediction_ev_am_prophet.csv", sep = ",")
 
 # Assuming your dataset is named 'df'
 export_data <- cbind(export_data, charger_data_kwh_generated)
