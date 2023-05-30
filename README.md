@@ -91,6 +91,8 @@ Unfortunately, the historical data of charging points energy consumption is not 
 
 ## Modeling
 
+Since we are dealing with the multivariate time series and the number of electric vehicles and EV charging stations are both endogenous and exogenous variables to each other, we decided to go with the Meta Prophet model which is good for time series forecasting, easily adjustable and interpretable (See Prophet_CP and Prophet_EV R script). The fuel prices are exogenous variable to our model and we used an ARIMA model to foreccast petrol prices have been forecast (See Fuel prices forecast R script).
+
 ## Dashboard
 
 <img width="762" alt="image" src="https://github.com/r-niemans/cgiproject/assets/85016926/f37af76e-aedb-4cdf-ae5d-8109c2008151">
