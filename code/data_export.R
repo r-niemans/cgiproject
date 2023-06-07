@@ -2,7 +2,7 @@ rm(list = ls())
 library(tidyverse)
 library(lubridate)
 library(tseries)
-
+library(sf)
 
 hist_data <- read.csv('datasets/full_data_wide_am.csv')[,c(2:6)]
 
@@ -11,9 +11,9 @@ hist_data$value_EV_pesimistic <- hist_data$value_EV
 
 hist_data$value_CP_optimistic <- hist_data$value_CP
 hist_data$value_CP_pesimistic <- hist_data$value_CP
-pred_EV <- read.csv('datasets/prediction_ev_prophet.csv')[,c(2,18,17,14,13)]
-pred_CP <- read.csv('datasets/prediction_cp_prophet.csv')[,c(2,18,17,14,13)]
-pred_price <- read.csv('datasets/prediction_gas.csv')
+pred_EV <- read.csv('output/prediction_ev_prophet.csv')[,c(2,18,17,14,13)]
+pred_CP <- read.csv('output/prediction_cp_prophet.csv')[,c(2,18,17,14,13)]
+pred_price <- read.csv('output/prediction_gas.csv')
 
 pred_EV$month_year <- ymd(pred_EV$month_year)
 pred_CP$month_year <- ymd(pred_CP$month_year)
@@ -40,6 +40,10 @@ export_data <- rbind(hist_data, forecast_data)
 
 ## Energy forecast
 # Generate random kWh usage values with a minimum threshold
+# Read in dataset with energy consumption
+charger_data <- read.csv("datasets/evdata.csv", sep = ",")
+# Select only column with the monthly energy consumption of the selected datapoint
+charger_data_kwh_m <- charger_data[,12]
 min_threshold <- 93.5
 charger_data_kwh_generated <- pmax(abs(rnorm(28677, mean = mean(charger_data_kwh_m), sd = sd(charger_data_kwh_m))), min_threshold)
 
@@ -72,5 +76,5 @@ export_data[,c(3,4,6,7,8,9)] <- round(export_data[,c(3,4,6,7,8,9)])
 export_data[,5] <- round(export_data[,5],2)
 
 
-write.csv(export_data, 'datasets/Tableu_data.csv')
+write.csv(export_data, 'output/Tableu_data.csv')
 
