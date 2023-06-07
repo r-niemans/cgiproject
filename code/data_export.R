@@ -11,9 +11,9 @@ hist_data$value_EV_pesimistic <- hist_data$value_EV
 
 hist_data$value_CP_optimistic <- hist_data$value_CP
 hist_data$value_CP_pesimistic <- hist_data$value_CP
-pred_EV <- read.csv('output/prediction_ev_prophet.csv')[,c(2,18,17,14,13)]
-pred_CP <- read.csv('output/prediction_cp_prophet.csv')[,c(2,18,17,14,13)]
-pred_price <- read.csv('output/prediction_gas.csv')
+pred_EV <- read.csv('datasets/prediction_ev_prophet.csv')[,c(2,18,17,14,13)]
+pred_CP <- read.csv('datasets/prediction_cp_prophet.csv')[,c(2,18,17,14,13)]
+pred_price <- read.csv('datasets/prediction_gas.csv')
 
 pred_EV$month_year <- ymd(pred_EV$month_year)
 pred_CP$month_year <- ymd(pred_CP$month_year)
@@ -38,13 +38,33 @@ forecast_data <- tibble(postal_code = pred_EV$postal_code, month_year = pred_EV$
 
 export_data <- rbind(hist_data, forecast_data)
 
+## Energy forecast
+# Generate random kWh usage values with a minimum threshold
+min_threshold <- 93.5
+charger_data_kwh_generated <- pmax(abs(rnorm(28677, mean = mean(charger_data_kwh_m), sd = sd(charger_data_kwh_m))), min_threshold)
 
-# geojson file is too large to be uploaded on github
+# Add the generated values to the export_data dataset
+export_data$charger_data_kwh_generated <- charger_data_kwh_generated
+
+# Round the generated values to two decimal places
+charger_data_kwh_generated <- round(charger_data_kwh_generated, 2)
+
+# Calculate the predicted usage
+export_data$predicted_usage <- export_data$value_CP * export_data$charger_data_kwh_generated
+
+# Calculate the pessimistic usage
+export_data$pessimistic_usage <- export_data$value_CP_pesimistic * export_data$charger_data_kwh_generated
+
+# Calculate the optimistic usage
+export_data$optimistic_usage <- export_data$value_CP_optimistic * export_data$charger_data_kwh_generated
+
+
 geojson <- st_read("datasets/georef-netherlands-postcode-pc4.geojson")
 
 # For now we drop the geometry
 geojson <- st_set_geometry(geojson, NULL)
 geojson$pc4_code <- as.numeric(geojson$pc4_code)
+
 
 export_data <- export_data %>% left_join(geojson[,c(1,2,5)], by = join_by('postal_code' == 'pc4_code'))
 export_data$year <- year(export_data$month_year)
@@ -52,5 +72,5 @@ export_data[,c(3,4,6,7,8,9)] <- round(export_data[,c(3,4,6,7,8,9)])
 export_data[,5] <- round(export_data[,5],2)
 
 
-write.csv(export_data, 'output/Tableu_data.csv')
+write.csv(export_data, 'datasets/Tableu_data.csv')
 
