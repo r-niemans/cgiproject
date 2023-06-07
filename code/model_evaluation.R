@@ -4,6 +4,7 @@ rm(list = ls())
 library(dplyr)
 library(prophet)
 library(MLmetrics)
+library(lubridate)
 df1 <- read.csv("datasets/full_data_wide_am.csv")
 df1 <- df1[,-c(1,6,7,8,9:23)]
 
@@ -12,8 +13,8 @@ df1$month_year <- as.Date(df1$month_year) # convert to Date type
 # Initialize an empty data frame
 final_df_prophet <- data.frame()
 
-df_train <- df1[df1$month_year < as.Date('2022-06-02'),]
-df_test <- df1[df1$month_year > as.Date('2022-06-02'),]
+df_train <- df1[df1$month_year < as.Date('2021-12-02'),]
+df_test <- df1[df1$month_year > as.Date('2021-12-02'),]
 # Initialize an empty data frame
 final_df_prophet <- data.frame()
 # Get unique postal codes
@@ -48,7 +49,7 @@ for (postal_code in postal_codes) {
   # Predict future values
   forecast <- predict(m, future)
   
-  # Filter out the forecasted data until 1 January 2030
+  # Filter out the forecasted data 
   forecast_future <- forecast %>% filter(ds <= as.Date('2030-01-01'))
   
   # Add postal_code to forecast_future
@@ -62,14 +63,15 @@ final_df_prophet_cp <- final_df_prophet %>% rename(predicted_cp = yhat)
 final_df_prophet_cp <- final_df_prophet_cp %>% rename(month_year = ds)
 
 
-preds <- final_df_prophet_cp$predicted_cp[ymd(final_df_prophet_cp$ds) > ymd('2022-06-02')]
+preds <- final_df_prophet_cp$predicted_cp[ymd(final_df_prophet_cp$month_year) > ymd('2022-01-02')]
+dates <- final_df_prophet_cp$month_year[ymd(final_df_prophet_cp$month_year) > ymd('2022-01-02')]
+eval <- tibble(dates, preds, real = df_test$value_CP)
+eval$error <- eval$preds - eval$real
 
-# MAFE
-MAE(preds, df_test$value_CP)
+# MAFE and RMFE
+eval %>% group_by(dates) %>% summarise(RMSE = RMSE(preds, real), MAE = mean(abs(error)))
 
 
-# RMFE
-RMSE(preds, df_test$value_CP)
 
 
 # Calculate the total sum of squares (TSS)
@@ -82,3 +84,10 @@ RSS <- sum((df_test$value_CP - preds)^2)
 R_squared <- 1 - (RSS / TSS)
 
 
+### Hit rate within the Confidence interval ###
+filtered_df <- final_df_prophet_cp[ymd(final_df_prophet_cp$month_year) > ymd('2022-01-02'),]
+
+CI <- tibble(dates, min = filtered_df$yhat_lower, max = filtered_df$yhat_upper)
+CI$hit <- ifelse(df_test$value_CP > CI$min & df_test$value_CP < CI$max, 1,0)
+CI %>% group_by(dates) %>% summarise(hit_rate = mean(hit))
+df_test$value_CP[999]
